@@ -1,46 +1,105 @@
 /*
  * Copyright (c) 2020 The ZMK Contributors
- * SPDX-License-Identifier: MIT
  *
- * This is a Colemak 28 oneshot keymap for the Humla keyboard.
- * Last edited by James White, November 29, 2021.
+ * SPDX-License-Identifier: MIT
  */
 
 #include <behaviors.dtsi>
-#include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+
+
 / {
+    combos {
+        compatible = "zmk,combos";
+
+        Esc {
+            bindings = <&kp ESC>;
+            key-positions = <1 0>;
+        };
+    };
+
+    macros {
+        M1: M1 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LS(LG(S))>;
+            label = "M1";
+        };
+
+        M3: M3 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(LA(DEL))>;
+            label = "M3";
+        };
+
+        M2: M2 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(LS(R))>;
+            label = "M2";
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
+            // -----------------------------------------------------------------------------------------
+            // |  TAB |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BKSP |
+            // | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
+            // | SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | ESC  |
+            //                    | GUI | LWR | SPC |   | ENT | RSE  | ALT |
+
+            label = "Base";
             bindings = <
-                &kp Q     &kp J     &kp W     &kp M     &kp APOS        &kp SLASH &kp F     &kp U     &kp Y     &kp X
-                &kp A     &kp R     &kp S     &kp T     &kp G           &kp P     &kp N     &kp E     &kp I     &kp O
-                &kp COMMA &kp L     &kp C     &kp D     &kp V           &kp B     &kp H     &kp Z     &kp K     &kp DOT
-                                    SL(NAV_L) &kp SPACE SQ(LSHFT)       SQ(RSHFT) &kp BSPC  SL(NUM_L)
+  &kp Q             &kp W  &kp E             &kp R  &kp T        &kp Y          &kp U           &kp I                      &kp O       &kp P
+  &kp A             &kp S  &kp D             &kp F  &kp G        &kp H          &kp J           &kp K                      &kp L       &kp SQT
+  &mt LEFT_SHIFT Z  &kp X  &kp C             &kp V  &kp B        &kp N          &kp M           &kp COMMA                  &kp PERIOD  &kp SLASH
+                           &kp LEFT_CONTROL  &mo 1  &kp SPACE    &kp BACKSPACE  &lt 2 KP_ENTER  &mt RIGHT_SHIFT RIGHT_GUI
             >;
         };
 
-        num_layer {
-            label = "Num";
+        lower_layer {
+            // -----------------------------------------------------------------------------------------
+            // |  TAB |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | BKSP |
+            // | BTCLR| BT1 | BT2 | BT3 | BT4 | BT5 |   | LFT | DWN |  UP | RGT |     |      |
+            // | SHFT |     |     |     |     |     |   |     |     |     |     |     |      |
+            //                    | GUI |     | SPC |   | ENT |     | ALT |
+
+            label = "Lower";
             bindings = <
-                &kp SLASH &kp N7    &kp N8    &kp N9    &trans          &trans    &trans    CAPSWORD  &trans    &trans
-                &kp MINUS &kp N4    &kp N5    &kp N6    &kp PLUS        &trans    SK(LSHFT) SK(LCTRL) SK(LALT)  SK(LGUI)
-                &kp EQUAL &kp N1    &kp N2    &kp N3    &kp ASTRK       &trans    SK(RSHFT) SK(RCTRL) SK(RALT)  SK(RGUI)
-                                &lt NAV_L DOT &kp N0    &trans          &trans    &trans    &trans
+  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp NUMBER_4      &kp N5               &kp NUMBER_6  &kp N7    &kp N8        &kp N9     &kp N0
+  &kp LEFT_ALT  &kp MINUS     &kp EQUAL     &kp LEFT_BRACKET  &kp RIGHT_BRACKET    &kp LEFT      &kp DOWN  &kp UP_ARROW  &kp RIGHT  &kp SEMICOLON
+  &kp DEL       &M1           &M2           &kp TAB           &trans               &trans        &trans    &trans        &trans     &trans
+                              &M3           &trans            &trans               &trans        &trans    &trans
             >;
         };
 
-        nav_layer {
-            label = "Nav";
+        raise_layer {
+            // -----------------------------------------------------------------------------------------
+            // |  TAB |  !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  | BKSP |
+            // | CTRL |     |     |     |     |     |   |  -  |  =  |  [  |  ]  |  \  |  `   |
+            // | SHFT |     |     |     |     |     |   |  _  |  +  |  {  |  }  | "|" |  ~   |
+            //                    | GUI |     | SPC |   | ENT |     | ALT |
+
+            label = "Raise";
             bindings = <
-                &trans    &trans    &trans    CAPSWORD  &trans          &trans    &kp HOME  &kp UARW  &kp END   &kp LC(Z)
-                SK(LGUI)  SK(LALT)  SK(LCTRL) SK(LSHFT) &trans          &kp PG_UP &kp LARW  &kp DARW  &kp RARW  &kp LC(LS(Z))
-                SK(RGUI)  SK(RALT)  SK(RCTRL) SK(RSHFT) &trans          &kp PG_DN &kp ESC   &kp TAB   &kp RET   &kp LS(INS)
-                                    &trans    &trans    &trans          &trans    &kp BSPC  &lt NUM_L DEL
+  &kp F1      &kp F2        &kp F3        &kp F4        &kp F5          &kp F6      &kp F7      &kp F8        &kp F9     &kp F10
+  &kp F11     &kp F12       &trans        &trans        &trans          &kp LEFT    &kp DOWN    &kp UP_ARROW  &kp RIGHT  &trans
+  &bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3    &bt BT_NXT  &bt BT_PRV  &trans        &kp PG_UP  &kp PAGE_DOWN
+                            &trans        &trans        &trans          &mo 3       &trans      &trans
             >;
         };
 
+        layer_3 {
+            bindings = <
+  &sys_reset  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
+  &trans      &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
+  &trans      &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
+                      &trans  &trans  &trans    &trans  &trans  &trans
+            >;
+        };
     };
 };
